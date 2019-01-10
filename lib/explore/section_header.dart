@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class SectionHeaderPicker extends AnimatedWidget {
+class SectionHeader extends AnimatedWidget {
   static const double _textWidth = 180.0;
   final List<String> titles;
   final PageController controller;
   final ValueChanged<int> onPageSelected;
 
-  SectionHeaderPicker(this.titles, this.controller, this.onPageSelected)
+  SectionHeader(this.titles, this.controller, this.onPageSelected)
       : super(listenable: controller);
 
   @override

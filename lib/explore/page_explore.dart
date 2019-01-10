@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'section_header_picker.dart';
+import 'section_header.dart';
+import 'section_dots.dart';
 
 class Section {
   final String name;
@@ -90,6 +91,7 @@ List<Section> sections = <Section>[
 class ExplorerPage extends StatelessWidget {
   final PageController _controller = PageController(initialPage: 0);
   final double _cellHeight = 160;
+  final double _imageWidth = 92;
 
   @override
   Widget build(BuildContext context) {
@@ -98,24 +100,28 @@ class ExplorerPage extends StatelessWidget {
           child: Container(),
           preferredSize: Size.fromHeight(8.0),
         ),
-        body: Container(
-          color: Theme.of(context).backgroundColor,
-          child: Column(
-            children: <Widget>[
-              SectionHeaderPicker(
-                  sections.map((section) => section.name).toList(),
-                  _controller,
-                  (sectionIndex) {}),
-              Expanded(
-                child: PageView.builder(
-                  controller: _controller,
-                  itemCount: sections.length,
-                  itemBuilder: (context, index) {
-                    return _buildSectionPage(index);
-                  },
+        body: ScrollConfiguration(
+          behavior: ScrollBehavior(),
+          child: Container(
+            color: Theme.of(context).backgroundColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                SectionHeader(sections.map((section) => section.name).toList(),
+                    _controller, (sectionIndex) {}),
+                SectionDots(sections.length, _controller, (sectionIndex) {}),
+                Expanded(
+                  child: PageView.builder(
+                    controller: _controller,
+                    itemCount: sections.length,
+                    itemBuilder: (context, index) {
+                      return _buildSectionPage(index);
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }
@@ -132,7 +138,7 @@ class ExplorerPage extends StatelessWidget {
             context, section.cells[index], index, itemCount);
       },
       itemCount: itemCount,
-      padding: EdgeInsets.only(left: 36.0, right: 8.0, top: 16.0),
+      padding: EdgeInsets.only(right: 8.0, top: 16.0),
       itemExtent: _cellHeight,
       physics: AlwaysScrollableScrollPhysics(),
     );
@@ -167,6 +173,7 @@ class ExplorerPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.max,
         children: contentWidgets,
       ),
     );
@@ -179,7 +186,7 @@ class ExplorerPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: SizedBox.fromSize(
-        size: Size.fromWidth(92),
+        size: Size.fromWidth(_imageWidth),
         child: FittedBox(
           alignment: Alignment.center,
           fit: BoxFit.cover,
@@ -195,7 +202,7 @@ class ExplorerPage extends StatelessWidget {
   ///
   Widget _buildSectionCellInfo(BuildContext context, Cell cell) {
     return Container(
-      width: 180.0,
+      width: MediaQuery.of(context).size.width - _imageWidth - 60,
       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Container(
         color: Color.fromRGBO(0, 0, 0, 0.02),
