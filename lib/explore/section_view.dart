@@ -21,6 +21,9 @@ class _SectionViewState extends State<SectionView>
 
   ScrollController _scrollController;
   AnimationController _itemSpacingController;
+  CurvedAnimation _itemSpacingAnimation;
+
+  double _itemSpacing = DEFAULT_ITEM_SPACING;
 
   @override
   void initState() {
@@ -32,10 +35,17 @@ class _SectionViewState extends State<SectionView>
       lowerBound: 0,
       upperBound: 0.75,
       value: 0,
-      duration: Duration(milliseconds: 150),
-    )..addListener(() {
-        setState(() {});
-      });
+      duration: Duration(milliseconds: 250),
+    );
+
+    _itemSpacingAnimation =
+        CurvedAnimation(parent: _itemSpacingController, curve: Curves.easeInOut)
+          ..addListener(() {
+            setState(() {
+              _itemSpacing =
+                  (_itemSpacingAnimation.value + 1.0) * DEFAULT_ITEM_SPACING;
+            });
+          });
 
     _itemSpacingController.reverse();
   }
@@ -82,8 +92,7 @@ class _SectionViewState extends State<SectionView>
         },
         itemCount: itemCount,
         padding: EdgeInsets.only(right: 8.0, top: 16.0),
-        itemExtent: SectionView._cellHeight +
-            (1.0 + _itemSpacingController.value) * DEFAULT_ITEM_SPACING,
+        itemExtent: SectionView._cellHeight + _itemSpacing,
         physics: AlwaysScrollableScrollPhysics(),
       ),
     );
@@ -117,7 +126,8 @@ class _SectionViewState extends State<SectionView>
 
     return Container(
       margin: EdgeInsets.only(
-          bottom: (1.0 + _itemSpacingController.value) * DEFAULT_ITEM_SPACING),
+        bottom: _itemSpacing,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.end,
