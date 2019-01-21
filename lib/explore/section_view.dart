@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_animations/explore/page_destination_detail.dart';
 import 'section.dart';
 
 class SectionView extends StatefulWidget {
@@ -7,7 +8,7 @@ class SectionView extends StatefulWidget {
   static const double _cellHeight = 160;
   static const double _imageWidth = 92;
 
-  SectionView(this.section) : super(key: ObjectKey(section));
+  SectionView(this.section, [Key key]) : super(key: key);
 
   @override
   _SectionViewState createState() {
@@ -102,7 +103,7 @@ class _SectionViewState extends State<SectionView>
   /// Builds on cell based on the given index
   ///
   Widget _buildSectionCell(
-      BuildContext context, Cell cell, int index, int itemCount) {
+      BuildContext context, Destination cell, int index, int itemCount) {
     var last = false;
     var imageLeft = index % 2 == 0;
 
@@ -128,11 +129,23 @@ class _SectionViewState extends State<SectionView>
       margin: EdgeInsets.only(
         bottom: _itemSpacing,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.max,
-        children: contentWidgets,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            fullscreenDialog: true,
+            builder: (context) {
+              return DestinationDetailPage(
+                destination: cell,
+              );
+            },
+          ));
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
+          children: contentWidgets,
+        ),
       ),
     );
   }
@@ -140,7 +153,7 @@ class _SectionViewState extends State<SectionView>
   ///
   /// The image of each cell
   ///
-  Widget _buildSectionCellImage(BuildContext context, Cell cell) {
+  Widget _buildSectionCellImage(BuildContext context, Destination cell) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: SizedBox.fromSize(
@@ -148,8 +161,11 @@ class _SectionViewState extends State<SectionView>
         child: FittedBox(
           alignment: Alignment.center,
           fit: BoxFit.cover,
-          child:
-              Image.network("${cell.imageUrl}?dl&fit=crop&crop=entropy&w=480"),
+          child: Hero(
+            tag: "hero_${cell.tag}",
+            child: Image.network(
+                "${cell.imageUrl}?dl&fit=crop&crop=entropy&w=480"),
+          ),
         ),
       ),
     );
@@ -158,7 +174,7 @@ class _SectionViewState extends State<SectionView>
   ///
   /// The text content of each cell
   ///
-  Widget _buildSectionCellInfo(BuildContext context, Cell cell) {
+  Widget _buildSectionCellInfo(BuildContext context, Destination cell) {
     return Container(
       width: MediaQuery.of(context).size.width - SectionView._imageWidth - 60,
       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),

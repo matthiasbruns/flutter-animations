@@ -1,6 +1,6 @@
 class Section {
   final String name;
-  final List<Cell> cells;
+  final List<Destination> cells;
 
   Section(this.name, this.cells);
 
@@ -16,18 +16,19 @@ class Section {
   int get hashCode => name.hashCode ^ cells.hashCode;
 }
 
-class Cell {
+class Destination {
+  final String tag;
   final String imageUrl;
   final String city;
   final String country;
   final int availableFlights;
 
-  Cell(this.city, this.country, this.imageUrl, this.availableFlights);
+  Destination(this.tag, this.city, this.country, this.imageUrl, this.availableFlights);
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Cell &&
+          other is Destination &&
               runtimeType == other.runtimeType &&
               imageUrl == other.imageUrl &&
               city == other.city &&
