@@ -22,24 +22,46 @@ class DestinationDetailPage extends StatelessWidget {
       body: Builder(
         builder: (context) => Container(
               width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  _imageHero(context),
-                  SizedBox(height: 24),
-                  _destinationOverview(context),
-                  SizedBox(height: 24),
-                  FlightArcWidget(),
-                  SizedBox(height: 24),
-                  _flightDetail(context),
-                  SizedBox(height: 24),
-                  Divider(
-                    height: 1,
-                    color: Colors.grey,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      _imageHero(context),
+                      SizedBox(height: 24),
+                      _destinationOverview(context),
+                      SizedBox(height: 24),
+                      FlightArcWidget(),
+                      SizedBox(height: 24),
+                      _flightDetail(context),
+                      SizedBox(height: 24),
+                      Divider(
+                        height: 1,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 24),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 80.0, right: 16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "Facts",
+                              style: Theme.of(context).textTheme.headline,
+                            ),
+                            SizedBox(height: 12),
+                            Text(
+                                "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum"),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
       ),
