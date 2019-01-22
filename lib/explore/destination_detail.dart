@@ -100,10 +100,11 @@ class DestinationDetailWidget extends StatelessWidget {
       height: 240,
       child: ListView.builder(
         itemBuilder: (context, index) {
+          Widget imageWidget;
           if (index == 0) {
-            return SizedBox(width: 80.0);
+            imageWidget = SizedBox(width: 80.0);
           } else if (index == 1) {
-            return Hero(
+            imageWidget = Hero(
               tag: "hero_${destination.tag}",
               placeholderBuilder: (context, child) {
                 return child;
@@ -113,11 +114,9 @@ class DestinationDetailWidget extends StatelessWidget {
             );
           } else {
             var image = destination.galleryUrls[index - 1];
-            return Hero(
-              tag: "hero_${image.hashCode}",
-              child: _galleryImage(index, itemCount, context, image),
-            );
+            imageWidget = _galleryImage(index, itemCount, context, image);
           }
+          return imageWidget;
         },
         scrollDirection: Axis.horizontal,
         itemCount: itemCount,
