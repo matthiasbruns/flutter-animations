@@ -156,13 +156,13 @@ class _SectionViewState extends State<SectionView>
   Widget _buildSectionCellImage(BuildContext context, Destination cell) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: SizedBox.fromSize(
-        size: Size.fromWidth(SectionView._imageWidth),
-        child: FittedBox(
-          alignment: Alignment.center,
-          fit: BoxFit.cover,
-          child: Hero(
-            tag: "hero_${cell.tag}",
+      child: Hero(
+        tag: "hero_${cell.tag}",
+        child: SizedBox.fromSize(
+          size: Size.fromWidth(SectionView._imageWidth),
+          child: FittedBox(
+            alignment: Alignment.center,
+            fit: BoxFit.cover,
             child: Image.network(
                 "${cell.imageUrl}?dl&fit=crop&crop=entropy&w=480"),
           ),
