@@ -1,14 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animations/explore/destination_detail_enter_animation.dart';
 import 'package:flutter_animations/painter/arc_painter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FlightArcWidget extends StatelessWidget {
+  final DestinationDetailsEnterAnimation animation;
   final Point start;
   final Point end;
 
-  FlightArcWidget()
+  FlightArcWidget(this.animation)
       : this.start = Point(0.33, 0.85),
         this.end = Point(0.8, 0.3);
 
@@ -51,8 +53,11 @@ class FlightArcWidget extends StatelessWidget {
           SizedBox(
             height: height,
             width: width,
-            child: CustomPaint(
-              painter: ArcPainter(start, end),
+            child: ClipRect(
+              clipper: _ArcClipper(animation),
+              child: CustomPaint(
+                painter: ArcPainter(start, end),
+              ),
             ),
           )
         ],
@@ -75,5 +80,25 @@ class FlightArcWidget extends StatelessWidget {
         color: Colors.white.withAlpha(150),
       ),
     );
+  }
+}
+
+class _ArcClipper extends CustomClipper<Rect> {
+  final DestinationDetailsEnterAnimation animation;
+
+  _ArcClipper(this.animation);
+
+  @override
+  Rect getClip(Size size) {
+    return new Rect.fromLTWH(
+        size.width * animation.flightArcCurvePercentX.value,
+        0.0,
+        size.width,
+        size.height);
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return true;
   }
 }

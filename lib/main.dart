@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animations/explore/page_destination_detail.dart';
-
-import 'calendar/page_calendar.dart';
 import 'explore/page_explore.dart';
 
 void main() => runApp(MyApp());
