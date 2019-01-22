@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animations/explore/destination_detail_enter_animation.dart';
 import 'package:flutter_animations/explore/flight_arc_widget.dart';
@@ -111,8 +112,11 @@ class DestinationDetailWidget extends StatelessWidget {
                   index, itemCount, context, destination.imageUrl),
             );
           } else {
-            return _galleryImage(
-                index, itemCount, context, destination.galleryUrls[index - 1]);
+            var image = destination.galleryUrls[index - 1];
+            return Hero(
+              tag: "hero_${image.hashCode}",
+              child: _galleryImage(index, itemCount, context, image),
+            );
           }
         },
         scrollDirection: Axis.horizontal,

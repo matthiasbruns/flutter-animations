@@ -17,18 +17,26 @@ class DestinationGalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var itemCount = 3;
+    var itemCount = destination.galleryUrls.length;
+    var size = MediaQuery.of(context).size;
     return Container(
+      color: Colors.black,
+      width: size.width,
+      height: size.height,
       child: PageView.builder(
         controller: _galleryPageController,
         itemBuilder: (context, index) {
+          var image = destination.galleryUrls[index];
           return Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 0.0,
               horizontal: 8.0,
             ),
-            child: Image.network(
-                "${destination.galleryUrls[index]}?dl&fit=crop&crop=entropy&w=480"),
+            child: Hero(
+              tag: index == 0 ? "hero_${destination.tag}" : "hero_${image.hashCode}",
+              child: Image.network(
+                  "${destination.galleryUrls[index]}?dl&fit=crop&crop=entropy&w=480"),
+            ),
           );
         },
         itemCount: itemCount,
