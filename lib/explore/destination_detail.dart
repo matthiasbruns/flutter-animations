@@ -27,7 +27,7 @@ class DestinationDetailWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              _imageHero(context),
+              _detailHead(context),
               SizedBox(height: 24),
               _destinationOverview(context),
               SizedBox(height: 24),
@@ -65,38 +65,83 @@ class DestinationDetailWidget extends StatelessWidget {
     );
   }
 
-  Widget _imageHero(BuildContext context) {
+  Widget _detailHead(BuildContext context) {
     return SizedBox.fromSize(
       size: Size.fromHeight(200),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: IconButton(
-              icon: Icon(
-                FontAwesomeIcons.longArrowAltLeft,
-                color: Theme.of(context).accentColor,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-          Expanded(
-            child: Hero(
-              tag: "hero_${destination.tag}",
-              child: FittedBox(
-                alignment: Alignment.center,
-                fit: BoxFit.cover,
-                child: Image.network(
-                    "${destination.imageUrl}?dl&fit=crop&crop=entropy&w=480"),
-              ),
-            ),
-          ),
+          _imageGallery(context),
+          _floatingBackButton(context),
         ],
+      ),
+    );
+  }
+
+  Widget _floatingBackButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: IconButton(
+        icon: Icon(
+          FontAwesomeIcons.longArrowAltLeft,
+          color: Theme.of(context).accentColor,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+  }
+
+  Widget _imageGallery(BuildContext context) {
+    var itemCount = 1 + destination.galleryUrls?.length;
+    return SizedBox(
+      height: 240,
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return SizedBox(width: 80.0);
+          } else if (index == 1) {
+            return Hero(
+              tag: "hero_${destination.tag}",
+              child: _galleryImage(
+                  index, itemCount, context, destination.imageUrl),
+            );
+          } else {
+            return _galleryImage(
+                index, itemCount, context, destination.galleryUrls[index - 2]);
+          }
+        },
+        scrollDirection: Axis.horizontal,
+        itemCount: 2 + destination.galleryUrls?.length,
+      ),
+    );
+  }
+
+  Widget _galleryImage(
+      int index, int itemCount, BuildContext context, String url) {
+    return Padding(
+      padding: EdgeInsets.only(
+          right: (index < itemCount) ? 16.0 : 0.0,
+          left: (index >= itemCount) ? 16.0 : 0.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return Image.network("$url?dl&fit=crop&crop=entropy&w=480");
+              },
+              fullscreenDialog: true,
+            ),
+          );
+        },
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width - 80 - 40,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+            child: Image.network("$url?dl&fit=crop&crop=entropy&w=480"),
+          ),
+        ),
       ),
     );
   }

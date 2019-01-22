@@ -23,9 +23,10 @@ class Destination {
   final String country;
   final String flagUrl;
   final int availableFlights;
+  final List<String> galleryUrls;
 
   Destination(this.tag, this.city, this.country, this.imageUrl,
-      this.availableFlights, this.flagUrl);
+      this.availableFlights, this.flagUrl, this.galleryUrls);
 
   @override
   bool operator ==(Object other) =>
