@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animations/explore/destination_detail_enter_animation.dart';
 import 'package:flutter_animations/explore/flight_arc_widget.dart';
+import 'package:flutter_animations/explore/page_destination_gallery.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_animations/explore/section.dart';
@@ -93,7 +94,7 @@ class DestinationDetailWidget extends StatelessWidget {
   }
 
   Widget _imageGallery(BuildContext context) {
-    var itemCount = 1 + destination.galleryUrls?.length;
+    var itemCount = 1 + destination.galleryUrls.length;
     return SizedBox(
       height: 240,
       child: ListView.builder(
@@ -103,16 +104,19 @@ class DestinationDetailWidget extends StatelessWidget {
           } else if (index == 1) {
             return Hero(
               tag: "hero_${destination.tag}",
+              placeholderBuilder: (context, child) {
+                return child;
+              },
               child: _galleryImage(
                   index, itemCount, context, destination.imageUrl),
             );
           } else {
             return _galleryImage(
-                index, itemCount, context, destination.galleryUrls[index - 2]);
+                index, itemCount, context, destination.galleryUrls[index - 1]);
           }
         },
         scrollDirection: Axis.horizontal,
-        itemCount: 2 + destination.galleryUrls?.length,
+        itemCount: itemCount,
       ),
     );
   }
@@ -128,7 +132,10 @@ class DestinationDetailWidget extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
-                return Image.network("$url?dl&fit=crop&crop=entropy&w=480");
+                return DestinationGalleryPage(
+                  initialPage: index - 1,
+                  destination: destination,
+                );
               },
               fullscreenDialog: true,
             ),

@@ -23,10 +23,14 @@ class Destination {
   final String country;
   final String flagUrl;
   final int availableFlights;
-  final List<String> galleryUrls;
+  final List<String> additionalImageUrls;
+
+  List<String> get galleryUrls {
+    return <String>[imageUrl]..addAll(additionalImageUrls);
+  }
 
   Destination(this.tag, this.city, this.country, this.imageUrl,
-      this.availableFlights, this.flagUrl, this.galleryUrls);
+      this.availableFlights, this.flagUrl, this.additionalImageUrls);
 
   @override
   bool operator ==(Object other) =>
